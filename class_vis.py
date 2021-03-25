@@ -3,6 +3,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pylab as pl
+import random
+
+name = 0
 
 def prettyPicture(clf, X_test, y_test):
     x_min = 0.0; x_max = 31.0
@@ -30,10 +33,15 @@ def prettyPicture(clf, X_test, y_test):
     #plt.scatter(grade_sig, bumpy_sig, color = "b", label="Good")
     #plt.scatter(grade_bkg, bumpy_bkg, color = "r", label="Bad")
     #plt.legend()
+
+
+
     plt.xlabel("Berries")
     plt.ylabel("Choice")
+    global name
+    name = name + 1
+    plt.savefig(str(name) + ".png")
 
-    plt.savefig("test.png")
 
 import base64
 import json

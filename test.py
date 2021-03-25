@@ -1,11 +1,11 @@
 #import tbapy
-import numpy as np
-import matplotlib.pyplot as plt
-import csv
 #import pandas
 #import statsmodels
 #import seaborn
 #import plotly
+import numpy as np
+import matplotlib.pyplot as plt
+import csv
 import sklearn
 from sklearn.naive_bayes import GaussianNB
 from sklearn import svm
@@ -15,9 +15,12 @@ from class_vis import prettyPicture, output_image
 
 berryFeatures = np.array([[30,2], [27,3], [22,2], [21,1], [18,2], [17,1], [17,1], [14,2], [13,1], [10,2], [9,1], [7,3], [3,3], [2,1], [17,2], [17,3], [15,3], [15,1], [15,2], [15,3], [14,2], [14,1], [14,3]])
 berryLabels = np.array([1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,1,2,2,1,1,2,2])
+berryFeaturesCache = np.array([[32,5]])
 #berryFeatures = np.array([[]])
 #berryLabels = np.array([[]])
-berryFeaturesCache = np.array([[32,5]])
+
+berryFeaturesCon = np.array("berryfeatures.csv")
+berryLabelsCon = np.array ("berrylabels.csv")
 
 Winner = 2
 
@@ -117,6 +120,7 @@ def turntwo(berries, pile, clf, pWins, cWins, berryFeaturesCache, berryFeatures,
     #print(str(berries) + " " + str(reduction))
     berryFeaturesCache = np.concatenate((berryFeaturesCache, [[berries, reduction]]), axis = 0)
     #print(berryFeaturesCache)
+
     
     berries = berries - int(reduction)
     print("Computer took " + str(reduction))
@@ -143,8 +147,18 @@ def gameStart(berryFeatures, berryLabels, pWins, cWins):
     pile = []
     clf = svm.SVC(kernel='rbf', gamma = 2, C = 2)
     clf = clf.fit(berryFeatures, berryLabels)
-    prettyPicture(clf, berryFeatures, berryLabels)
+    prettyPicture(clf, berryFeaturesCon, berryLabelsCon)
     display(berries)
+
+    with open ("berryfeatures.csv", "a") as f:
+        bfeatures = csv.writer(f, dialect = "excel",quoting=csv.QUOTE_NONNUMERIC)
+        bfeatures.writerow(berryFeatures)
+    
+    with open ("berrylabels.csv", "a") as g:
+        blabels = csv.writer(g, dialect = "excel", quoting=csv.QUOTE_NONNUMERIC)
+        blabels.writerow(berryLabels)
+
+
     turntwo(berries, pile, clf, pWins, cWins, berryFeaturesCache, berryFeatures, berryLabels)
 
 def learnShit(berryFeatures, berryLabels, berryFeaturesCache, Winner, pWins, cWins):
@@ -163,5 +177,6 @@ def learnShit(berryFeatures, berryLabels, berryFeaturesCache, Winner, pWins, cWi
     berryFeaturesCache = np.array([[]])
     gameStart(berryFeatures, berryLabels, pWins, cWins)
 
+    
 gameStart(berryFeatures, berryLabels, pWins, cWins)
     
